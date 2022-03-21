@@ -1,0 +1,5 @@
+Design:
+Command Line Parameters:
+data file, template file, replacement file, output path 
+
+D:\KAUST\projects\tools\docpdfgenerate\test\input\initial_list.csv D:\KAUST\projects\tools\docpdfgenerate\test\input\vcc_conference.docx D:\KAUST\projects\tools\docpdfgenerate\test\input\replace.txt D:\KAUST\projects\tools\docpdfgenerate\test\output
