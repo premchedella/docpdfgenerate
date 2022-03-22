@@ -30,30 +30,37 @@ int main(int argc, char *argv[])
     QString data_file = QString(argv[1]);
     std::cout << "Data File = " << data_file.toStdString() << std::endl;
 
+    // Validate the Data file
     if (!IsValidDataFile(data_file))
     {
       is_process = false;
     }
 
+    // Get the template file
     QString template_file = QString(argv[2]);
     std::cout << "Template File = " << template_file.toStdString() << std::endl;
 
+    // Validate Template file
     if (!IsValidTemplateFile(template_file))
     {
       is_process = false;
     }
 
+    // Get the Replace Text file
     QString replace_file = QString(argv[3]);    
     std::cout << "Replacement File = " << replace_file.toStdString() << std::endl;
 
+    // Validate Replace file
     if (!IsValidReplaceFile(replace_file))
     {
       is_process = false;
     }
 
+    // Get the Ouptut Directory
     QString output_dir = QString(argv[4]);
     std::cout << "Output Path = " << output_dir.toStdString() << std::endl;
 
+    // Validate the Output Directory
     if (!IsValidOutputPath(output_dir))
     {
       is_process = false;
@@ -69,16 +76,16 @@ int main(int argc, char *argv[])
 
 bool IsValidDataFile(QString file_name)
 {
-  bool is_valid = true;
-
-  //Check whether Data file exists or not
+  bool is_valid = true;  
   QFileInfo fi(file_name);
 
+  // Check whether Data file exists or not
   if (fi.exists())
   {
-    //Get the Extension of file
-
+    // Get the Extension of file
     QString ext = fi.suffix();
+
+    // The Data file extensions is always csv
     if (ext.compare("csv") != 0)
     {
       is_valid = false;
@@ -95,16 +102,16 @@ bool IsValidDataFile(QString file_name)
 
 bool IsValidTemplateFile(QString file_name)
 {
-  bool is_valid = false;
-  //Check whether Data file exists or not
+  bool is_valid = false;  
   QFileInfo fi(file_name);
 
+  //Check whether Data file exists or not
   if (fi.exists())
-  {
-    is_valid = true;
-    //Get the Extension of file
-
+  {    
+    // Get the Extension of file
     QString ext = fi.suffix();
+
+    // The template file's extension is always doc or docx
     if ((ext.compare("doc") == 0) || (ext.compare("docx") == 0))
     {
       is_valid = true;      
@@ -125,16 +132,16 @@ bool IsValidTemplateFile(QString file_name)
 
 bool IsValidReplaceFile(QString file_name)
 {
-  bool is_valid = true;
-
-  //Check whether Data file exists or not
+  bool is_valid = true;  
   QFileInfo fi(file_name);
 
+  // Check whether Data file exists or not
   if (fi.exists())
   {
-    //Get the Extension of file
-
+    // Get the Extension of file
     QString ext = fi.suffix();
+
+    // The replacement file extension is alwys txt
     if (ext.compare("txt") != 0)
     {
       is_valid = false;
@@ -151,11 +158,10 @@ bool IsValidReplaceFile(QString file_name)
 
 bool IsValidOutputPath(QString dir_path)
 {
-  bool is_valid = false;
-
-  //Check whether Data file exists or not
+  bool is_valid = false;  
   QFileInfo dir(dir_path);
 
+  // Check whether the output directory is directory or not
   if (dir.isDir())  
   {
     is_valid = true;
