@@ -3,6 +3,7 @@
 #include <QtCore/QCoreApplication>
 #include <QtCore/QString>
 #include <QtCore/QFileInfo>
+#include <QtCore/QDir>
 
 using namespace std;
 
@@ -42,11 +43,21 @@ int main(int argc, char *argv[])
       is_process = false;
     }
 
-    QString replace_file = QString(argv[3]);
+    QString replace_file = QString(argv[3]);    
     std::cout << "Replacement File = " << replace_file.toStdString() << std::endl;
+
+    if (!IsValidReplaceFile(replace_file))
+    {
+      is_process = false;
+    }
 
     QString output_dir = QString(argv[4]);
     std::cout << "Output Path = " << output_dir.toStdString() << std::endl;
+
+    if (!IsValidOutputPath(output_dir))
+    {
+      is_process = false;
+    }
   } else
   {
     std::cout << "Not valid arguments." << std::endl; 
@@ -116,12 +127,42 @@ bool IsValidReplaceFile(QString file_name)
 {
   bool is_valid = true;
 
+  //Check whether Data file exists or not
+  QFileInfo fi(file_name);
+
+  if (fi.exists())
+  {
+    //Get the Extension of file
+
+    QString ext = fi.suffix();
+    if (ext.compare("txt") != 0)
+    {
+      is_valid = false;
+      std::cout << "Replace file extension is not in txt file format." << std::endl;
+    }
+  } else
+  {
+    is_valid = false;
+    std::cout << "Repalce file doest not exists." << std::endl;
+  }
+
   return is_valid;
 }
 
 bool IsValidOutputPath(QString dir_path)
 {
-  bool is_valid = true;
+  bool is_valid = false;
+
+  //Check whether Data file exists or not
+  QFileInfo dir(dir_path);
+
+  if (dir.isDir())  
+  {
+    is_valid = true;
+  } else
+  {    
+    std::cout << "Output is not a directory." << std::endl;
+  }
 
   return is_valid;
 }
