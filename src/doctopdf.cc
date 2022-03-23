@@ -4,6 +4,8 @@
 #include <QtCore/QString>
 #include <QtCore/QFileInfo>
 #include <QtCore/QDir>
+#include <QtCore/QProcess>
+#include <QtCore/QSettings>
 
 using namespace std;
 
@@ -12,11 +14,15 @@ bool IsValidTemplateFile(QString file_name);
 bool IsValidReplaceFile(QString file_name);
 bool IsValidOutputPath(QString dir_path);
 
+QString GetWordPath();
+
 int main(int argc, char *argv[])
 {
   QCoreApplication core_app(argc, argv);
 
   std::cout << "Convert Document into different PDF files." << std::endl;
+
+  QString word_path = GetWordPath();
 
   int no_args = argc;
 
@@ -171,4 +177,53 @@ bool IsValidOutputPath(QString dir_path)
   }
 
   return is_valid;
+}
+
+QString GetWordPath()
+{
+  QString word_path = "";
+
+
+  QSettings settings("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/App", 
+      QSettings::NativeFormat);
+
+  QStringList apps_list = settings.childGroups();
+  
+  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+  //process.setProcessEnvironment(env);
+  QStringList paths_list = env.toStringList();
+  QString path_env;
+  for (unsigned int counter = 0; counter < paths_list.size(); counter++)
+  {
+    QStringList path_list = paths_list.at(counter).split("=");
+    if (path_list.at(0) == "PATH")
+    {
+      path_env = path_list.at(1);
+      break;
+    }
+  }
+
+  QStringList path_dirs = path_env.split(";");
+
+  QString office_path;
+  foreach(office_path, path_dirs)
+  {
+    if (office_path.contains("Office"))
+    {
+      break;
+    }
+  }
+
+  QString word_program = office_path + QDir::separator() + "winword.exe";
+  word_program = QDir::toNativeSeparators(word_program);
+
+  QFile file(word_program);
+  bool retval = file.exists();
+
+  if (retval)
+  {
+    word_path = word_program;
+  }
+
+  return word_path;
 }
