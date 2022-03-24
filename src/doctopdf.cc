@@ -20,9 +20,7 @@ int main(int argc, char *argv[])
 {
   QCoreApplication core_app(argc, argv);
 
-  std::cout << "Convert Document into different PDF files." << std::endl;
-
-  QString word_path = GetWordPath();
+  std::cout << "Convert Document into different PDF files." << std::endl;  
 
   int no_args = argc;
 
@@ -183,47 +181,15 @@ QString GetWordPath()
 {
   QString word_path = "";
 
+  // Create Setting path variable to gt the word path
+  QString path = "HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/";
+  path += "CurrentVersion/App Paths/Winword.exe";
 
-  QSettings settings("HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/Windows/CurrentVersion/App", 
-      QSettings::NativeFormat);
+  path = QDir::toNativeSeparators(path);  
+  QSettings settings(path, QSettings::NativeFormat);
 
-  QStringList apps_list = settings.childGroups();
-  
-  QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-  //process.setProcessEnvironment(env);
-  QStringList paths_list = env.toStringList();
-  QString path_env;
-  for (unsigned int counter = 0; counter < paths_list.size(); counter++)
-  {
-    QStringList path_list = paths_list.at(counter).split("=");
-    if (path_list.at(0) == "PATH")
-    {
-      path_env = path_list.at(1);
-      break;
-    }
-  }
-
-  QStringList path_dirs = path_env.split(";");
-
-  QString office_path;
-  foreach(office_path, path_dirs)
-  {
-    if (office_path.contains("Office"))
-    {
-      break;
-    }
-  }
-
-  QString word_program = office_path + QDir::separator() + "winword.exe";
-  word_program = QDir::toNativeSeparators(word_program);
-
-  QFile file(word_program);
-  bool retval = file.exists();
-
-  if (retval)
-  {
-    word_path = word_program;
-  }
+  // . is default, so use that to get the value of the default.
+  word_path = settings.value(".").toString();  
 
   return word_path;
 }
