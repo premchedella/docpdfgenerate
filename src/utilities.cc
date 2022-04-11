@@ -7,7 +7,7 @@
 
 bool Utilities::IsValidDataFile(QString file_name)
 {
-  bool is_valid = true;
+  bool is_valid = false;
   QFileInfo fi(file_name);
 
   // Check whether Data file exists or not
@@ -17,10 +17,13 @@ bool Utilities::IsValidDataFile(QString file_name)
     QString ext = fi.suffix();
 
     // The Data file extensions is always csv
-    if (ext.compare("csv") != 0)
+    if ((ext.compare("csv") == 0) || (ext.compare("xls") == 0))
+    {
+      is_valid = true;
+    } else
     {
       is_valid = false;
-      std::cout << "Data file extension is not in csv file format." << std::endl;
+      std::cout << "Template file extension is not in correct format." << std::endl;
     }
   } else
   {
