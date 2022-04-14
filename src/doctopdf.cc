@@ -1,16 +1,17 @@
 #include <iostream>
 
-#include <QtCore/QCoreApplication>
+#include <QtWidgets/QApplication>
 #include <QtCore/QString>
 
 #include "utilities.h"
+#include "process_data.h"
 
 using namespace std;
 
 
 int main(int argc, char *argv[])
 {
-  QCoreApplication core_app(argc, argv);
+  QApplication app(argc, argv);
 
   std::cout << "Convert Document into different PDF files." << std::endl;  
 
@@ -61,6 +62,14 @@ int main(int argc, char *argv[])
     {
       is_process = false;
     }
+
+    if (is_process)
+    {
+      ProcessData process_data;
+
+      process_data.SetDataFile(data_file);
+      process_data.Process();
+    }
   } else
   {
     std::cout << "Not valid arguments." << std::endl; 
@@ -69,7 +78,7 @@ int main(int argc, char *argv[])
 
   QString word_path = Utilities::GetWordPath();
 
-  core_app.exit();
+  app.exit();
 }
 
 
