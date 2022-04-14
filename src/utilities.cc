@@ -17,7 +17,8 @@ bool Utilities::IsValidDataFile(QString file_name)
     QString ext = fi.suffix();
 
     // The Data file extensions is always csv
-    if ((ext.compare("csv") == 0) || (ext.compare("xls") == 0))
+    if ((ext.compare("csv") == 0) || (ext.compare("xls") == 0) || 
+        (ext.compare("xlsx") == 0))
     {
       is_valid = true;
     } else
